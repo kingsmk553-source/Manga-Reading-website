@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>อ่านมังงะ | Manga Studio</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;padding:18px;
+  background:#100d20;color:#fff;
+  font-family:Arial,sans-serif
+}
+.container{max-width:850px;margin:auto}
+a{color:#c8a7ff;text-decoration:none}
+header{padding:20px 0}
+h1{font-size:27px;margin:12px 0}
+p{color:#c8c0dc;line-height:1.7}
+.toolbar{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0}
+button{
+  border:0;border-radius:10px;padding:12px 16px;
+  background:#9b6cff;color:white;font-size:15px;
+  font-weight:bold;cursor:pointer
+}
+button.secondary{background:#39304f}
+button:disabled{opacity:.4;cursor:not-allowed}
+.reader{
+  background:#fff;color:#171321;
+  border-radius:14px;padding:12px;
+  max-width:620px;margin:20px auto
+}
+.page-label{text-align:center;color:#a99cbd;font-size:13px}
+.manga-panel{
+  position:relative;min-height:330px;overflow:hidden;
+  border:2px solid #231d2e;background:#e9e0f4;
+  display:flex;align-items:center;justify-content:center;
+  margin:8px 0
+}
+.scene{text-align:center;padding:20px;width:100%}
+.scene-emoji{font-size:70px;margin:8px}
+.scene-title{font-size:20px;font-weight:bold}
+.character{font-size:15px;color:#4a3d5b;margin-top:8px}
+.bubble{
+  position:relative;display:block;width:fit-content;
+  max-width:90%;margin:12px auto 18px;
+  padding:12px 16px;background:white;color:#21192d;
+  border:2px solid #292033;border-radius:18px;
+  text-align:center;line-height:1.6;font-weight:bold
+}
+.bubble:after{
+  content:"";position:absolute;bottom:-10px;left:28px;
+  width:15px;height:15px;background:white;
+  border-right:2px solid #292033;
+  border-bottom:2px solid #292033;
+  transform:skewY(35deg) rotate(15deg)
+}
+.thought{
+  border-radius:45%;border-style:dashed;
+  margin-bottom:28px
+}
+.thought:after{
+  content:"";position:absolute;bottom:-15px;left:25px;
+  width:9px;height:9px;background:white;
+  border:2px solid #292033;border-radius:50%;
+  box-shadow:10px 10px 0 -2px white,10px 10px 0 0 #292033
+}
+.dialogue{padding:8px 5px;color:#30263c;line-height:1.8}
+.dialogue p{color:#30263c}
+.chapter-note{
+  padding:15px;background:#201a35;border:1px solid #44365f;
+  border-radius:12px;margin:20px 0
+}
+.status{font-size:13px;color:#bfb4d7}
+@media(min-width:600px){
+  body{padding:28px}
+  .manga-panel{min-height:400px}
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+<a href="explore.html">← กลับไปเลือกมังงะ</a>
+
+<header>
+<div>🎴 MANGA STUDIO</div>
+<h1>ฤดูฝนที่เราได้พบกัน</h1>
+<p>บทที่ 1: วันที่เราได้พบกัน</p>
+<div class="status">โหมดตัวอย่าง · หน้านี้ยังไม่เชื่อมการอ่านพร้อมกันออนไลน์</div>
+</header>
+
+<div class="toolbar">
+  <button class="secondary" onclick="changeText()">ซ่อน/แสดงคำแปลไทย</button>
+  <button class="secondary" onclick="togglePinyin()">ซ่อน/แสดงพินอิน</button>
+</div>
+
+<div class="reader">
+  <div class="page-label" id="pageLabel">หน้า 1 / 3</div>
+
+  <section class="manga-panel">
+    <div class="scene">
+      <div class="scene-emoji">🌧️🏫</div>
+      <div class="scene-title">วันฝนตกที่โรงเรียน</div>
+      <div class="character">ฉากที่ 1 · บริเวณหน้าโรงเรียน</div>
+    </div>
+  </section>
+
+  <section class="manga-panel">
+    <div class="scene">
+      <div class="scene-emoji">👧🏻☂️</div>
+      <div class="bubble">
+        <div class="chinese">今天的雨真大啊！</div>
+        <div class="pinyin">Jīntiān de yǔ zhēn dà a!</div>
+        <div class="thai">วันนี้ฝนตกหนักจริง ๆ เลย!</div>
+      </div>
+      <div class="character">美莎 (เมษา) · กำลังพูด</div>
+    </div>
+  </section>
+
+  <section class="manga-panel">
+    <div class="scene">
+      <div class="scene-emoji">👦🏻🌂</div>
+      <div class="bubble thought">
+        <div class="chinese">她没有带伞吗？</div>
+        <div class="pinyin">Tā méiyǒu dài sǎn ma?</div>
+        <div class="thai">เธอไม่ได้เอาร่มมาหรือ?</div>
+      </div>
+      <div class="character">塔姆 (ธาม) · กำลังคิด</div>
+    </div>
+  </section>
+
+  <div class="dialogue">
+    <p><strong>旁白 · คำบรรยาย</strong></p>
+    <p class="chinese">雨越下越大，美莎站在学校门口。</p>
+    <p class="pinyin">Yǔ yuè xià yuè dà, Měishā zhàn zài xuéxiào ménkǒu.</p>
+    <p class="thai">ฝนตกหนักขึ้นเรื่อย ๆ เมษายืนอยู่ตรงประตูโรงเรียน</p>
+  </div>
+</div>
+
+<div class="toolbar">
+  <button class="secondary" id="prevBtn" onclick="changePage(-1)" disabled>← หน้าก่อน</button>
+  <button id="nextBtn" onclick="changePage(1)">หน้าถัดไป →</button>
+</div>
+
+<div class="chapter-note">
+  <strong>💬 คำพูดสำคัญประจำบท</strong>
+  <p>今天的雨真大啊！</p>
+  <p class="thai">ความหมาย: วันนี้ฝนตกหนักจริง ๆ เลย!</p>
+</div>
+
+<div class="toolbar">
+  <button onclick="alert('ตัวอย่างหน้าจออ่านมังงะ: ระบบไมโครโฟนและห้องออนไลน์จะเพิ่มภายหลัง')">🎙️ โหมดอ่านกับเพื่อน</button>
+  <button class="secondary" onclick="window.location.href='explore.html'">กลับไปเลือกเรื่องอื่น</button>
+</div>
+
+</div>
+
+<script>
+let page = 1;
+const totalPages = 3;
+let showThai = true;
+let showPinyin = true;
+
+function changePage(direction){
+  page += direction;
+  if(page < 1) page = 1;
+  if(page > totalPages) page = totalPages;
+
+  document.getElementById('pageLabel').textContent =
+    'หน้า '+page+' / '+totalPages;
+  document.getElementById('prevBtn').disabled = page === 1;
+  document.getElementById('nextBtn').disabled = page === totalPages;
+
+  const panels = document.querySelectorAll('.manga-panel');
+  panels.forEach((panel,index)=>{
+    panel.style.display = (index === (page-1)) ? 'flex' : 'none';
+  });
+}
+
+function changeText(){
+  showThai = !showThai;
+  document.querySelectorAll('.thai').forEach(el=>{
+    el.style.display = showThai ? '' : 'none';
+  });
+}
+
+function togglePinyin(){
+  showPinyin = !showPinyin;
+  document.querySelectorAll('.pinyin').forEach(el=>{
+    el.style.display = showPinyin ? '' : 'none';
+  });
+}
+
+changePage(0);
+</script>
+</body>
+</html>
