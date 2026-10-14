@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>จับคู่เพื่อนอ่านมังงะ | Manga Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:24px;background:#100d20;color:#fff;font-family:Arial,sans-serif}
+.container{max-width:700px;margin:auto}
+a{color:#c8a7ff;text-decoration:none}
+header{margin:28px 0}
+h1{font-size:30px}
+p{color:#c4bdd7;line-height:1.7}
+.panel{background:#201a35;border:1px solid #44365f;border-radius:18px;padding:22px;margin:18px 0}
+label{display:block;margin:15px 0 8px}
+select{width:100%;padding:13px;background:#120e20;color:white;border:1px solid #594a77;border-radius:10px;font-size:16px}
+button{width:100%;padding:14px;margin-top:15px;background:#9b6cff;color:white;border:0;border-radius:11px;font-size:16px;font-weight:bold;cursor:pointer}
+button.secondary{background:#39304f}
+.notice{background:#302744;padding:14px;border-radius:10px;font-size:14px;line-height:1.7;color:#e4d9ff}
+.status{display:none;text-align:center;margin-top:20px;padding:20px;border-radius:12px;background:#151126;border:1px solid #69518e}
+.spinner{font-size:38px;margin:10px}
+.people{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:18px 0}
+.person{width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#39304f;border:2px solid #8d6bc4;font-size:25px}
+.small{font-size:13px}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="index.html">← กลับหน้าแรก</a>
+
+<header>
+<div>🎴 MANGA STUDIO</div>
+<h1>🌐 อ่านมังงะกับเพื่อนใหม่</h1>
+<p>เลือกจำนวนคนที่อยากอ่านด้วยกัน แล้วเริ่มขั้นตอนจับคู่</p>
+</header>
+
+<div class="notice">
+โหมดทดลอง: หน้านี้จำลองขั้นตอนการจับคู่เท่านั้น ยังไม่มีผู้เล่นจริงจากอินเทอร์เน็ต
+และยังไม่สามารถเชื่อมต่อกับห้องของคนอื่นได้
+</div>
+
+<section class="panel">
+<h2>ตั้งค่าห้องอ่าน</h2>
+
+<label for="players">มึงอยากอ่านด้วยกันทั้งหมดกี่คน?</label>
+<select id="players">
+<option value="2">2 คน</option>
+<option value="3">3 คน</option>
+<option value="4">4 คน</option>
+<option value="5">5 คน</option>
+<option value="6">6 คน</option>
+</select>
+
+<button onclick="startMatch()">เริ่มจับคู่</button>
+
+<div class="status" id="status">
+<div class="spinner" id="symbol">🔍</div>
+<h2 id="statusTitle">กำลังเตรียมจับคู่...</h2>
+<p id="statusText"></p>
+<div class="people" id="people"></div>
+<button id="continueBtn" style="display:none" onclick="goExplore()">ไปเลือกมังงะ</button>
+<button class="secondary" onclick="resetMatch()">จับคู่ใหม่</button>
+</div>
+</section>
+
+<p class="small">เมื่อระบบออนไลน์จริง เราจะเพิ่มการจับคู่ผู้เล่น การเลือกบทบาทตัวละคร และการเปิดหรือปิดไมโครโฟนได้</p>
+</div>
+
+<script>
+function startMatch(){
+  const total = Number(document.getElementById('players').value);
+  const status = document.getElementById('status');
+  const people = document.getElementById('people');
+
+  status.style.display = 'block';
+  document.getElementById('symbol').textContent = '👥';
+  document.getElementById('statusTitle').textContent = 'โหมดจำลองการจับคู่';
+  document.getElementById('statusText').textContent =
+    'เลือกไว้ทั้งหมด '+total+' คน แต่ตอนนี้ยังไม่มีผู้เล่นออนไลน์จริงให้จับคู่';
+
+  people.innerHTML = '';
+  for(let i=0;i<total;i++){
+    const person = document.createElement('div');
+    person.className = 'person';
+    person.textContent = i===0 ? '🙂' : '❔';
+    person.title = i===0 ? 'มึง' : 'ยังไม่มีผู้เล่นจริง';
+    people.appendChild(person);
+  }
+
+  document.getElementById('continueBtn').style.display = 'block';
+  status.scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function resetMatch(){
+  document.getElementById('status').style.display = 'none';
+}
+
+function goExplore(){
+  window.location.href = 'explore.html';
+}
+</script>
+</body>
+</html>
