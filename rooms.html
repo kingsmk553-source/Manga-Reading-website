@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ห้องอ่านมังงะ | Manga Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#100d20;color:#fff;padding:24px}
+.container{max-width:760px;margin:0 auto}
+a{color:#c8a7ff;text-decoration:none}
+header{margin:24px 0 30px}
+h1{font-size:32px;margin:12px 0}
+.subtitle{color:#bcb5d1;line-height:1.7}
+.panel{background:#201a35;border:1px solid #44365f;border-radius:18px;padding:22px;margin:18px 0}
+h2{font-size:21px;margin-top:0}
+label{display:block;margin:15px 0 8px;color:#ded6f3}
+input,select{width:100%;padding:13px;border-radius:10px;border:1px solid #594a77;background:#120e20;color:white;font-size:16px}
+button{width:100%;padding:14px;border:0;border-radius:11px;background:#9b6cff;color:#fff;font-size:16px;font-weight:bold;margin-top:16px;cursor:pointer}
+button.secondary{background:#39304f}
+.notice{padding:13px;border-radius:10px;background:#302744;color:#e4d9ff;line-height:1.6;font-size:14px}
+.result{display:none;margin-top:18px;padding:18px;border-radius:12px;background:#151126;border:1px solid #69518e}
+.room-code{font-size:34px;letter-spacing:7px;font-weight:bold;text-align:center;margin:16px 0;color:#d5b8ff}
+.small{font-size:13px;color:#bcb5d1;line-height:1.6}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="index.html">← กลับหน้าแรก</a>
+
+<header>
+<div>🎴 MANGA STUDIO</div>
+<h1>ห้องอ่านมังงะกับเพื่อน</h1>
+<p class="subtitle">สร้างห้องส่วนตัวหรือเข้าร่วมห้องด้วยรหัส 6 หลัก แล้วเตรียมอ่านมังงะไปพร้อมกัน</p>
+</header>
+
+<div class="notice">
+โหมดทดลอง: ตอนนี้หน้านี้สร้างและค้นหาห้องได้ภายในเบราว์เซอร์เครื่องนี้เท่านั้น
+ยังไม่สามารถเชื่อมผู้เล่นจากหลายเครื่องได้ จนกว่าจะติดตั้งระบบเซิร์ฟเวอร์
+</div>
+
+<section class="panel">
+<h2>✨ สร้างห้องใหม่</h2>
+<p class="subtitle">สร้างรหัสห้อง 6 หลัก และเลือกจำนวนคนสูงสุดในห้อง</p>
+
+<label for="capacity">จำนวนคนในห้อง (รวมมึงด้วย)</label>
+<select id="capacity">
+<option value="2">2 คน</option>
+<option value="3">3 คน</option>
+<option value="4">4 คน</option>
+<option value="5">5 คน</option>
+<option value="6">6 คน</option>
+</select>
+
+<button onclick="createRoom()">สร้างห้อง</button>
+
+<div class="result" id="createdResult">
+<p>รหัสห้องของมึงคือ</p>
+<div class="room-code" id="roomCode"></div>
+<p id="roomInfo"></p>
+<button class="secondary" onclick="copyCode()">คัดลอกรหัสห้อง</button>
+<button onclick="goExplore()">เลือกมังงะ</button>
+</div>
+</section>
+
+<section class="panel">
+<h2>🔎 ค้นหาห้อง</h2>
+<label for="searchCode">กรอกรหัสห้อง 6 หลัก</label>
+<input id="searchCode" type="text" inputmode="numeric" maxlength="6" placeholder="เช่น 083521">
+<button onclick="searchRoom()">ค้นหาห้อง</button>
+<p id="searchResult" class="subtitle"></p>
+</section>
+
+<p class="small">ขั้นต่อไปจะเพิ่มระบบจับคู่ผู้เล่น การอ่านพร้อมกัน และเลือกบทบาทตัวละคร</p>
+</div>
+
+<script>
+let currentRoom = null;
+
+function createRoom(){
+  const capacity = Number(document.getElementById('capacity').value);
+  let code;
+  do {
+    code = String(Math.floor(Math.random()*1000000)).padStart(6,'0');
+  } while (localStorage.getItem('mangaRoom_'+code));
+
+  currentRoom = {code, capacity, players:1};
+  localStorage.setItem('mangaRoom_'+code, JSON.stringify(currentRoom));
+
+  document.getElementById('roomCode').textContent = code;
+  document.getElementById('roomInfo').textContent =
+    'จำนวนสูงสุด '+capacity+' คน · ตอนนี้มี 1 คน';
+  document.getElementById('createdResult').style.display = 'block';
+  document.getElementById('searchResult').textContent = '';
+}
+
+function searchRoom(){
+  const code = document.getElementById('searchCode').value.trim();
+  const output = document.getElementById('searchResult');
+
+  if(!/^\d{6}$/.test(code)){
+    output.textContent = 'กรุณากรอกรหัสตัวเลขให้ครบ 6 หลัก';
+    return;
+  }
+
+  const room = localStorage.getItem('mangaRoom_'+code);
+  if(!room){
+    output.textContent = 'ไม่พบห้องนี้ในเบราว์เซอร์เครื่องนี้';
+    return;
+  }
+
+  const data = JSON.parse(room);
+  output.textContent =
+    'พบห้อง '+data.code+' · รองรับ '+data.capacity+
+    ' คน · ตอนนี้มี '+data.players+' คน (โหมดทดลองในเครื่องนี้)';
+}
+
+function copyCode(){
+  const code = document.getElementById('roomCode').textContent;
+  if(navigator.clipboard && window.isSecureContext){
+    navigator.clipboard.writeText(code)
+      .then(()=>alert('คัดลอกรหัสห้องแล้ว: '+code))
+      .catch(()=>alert('รหัสห้องของมึงคือ '+code));
+  } else {
+    alert('รหัสห้องของมึงคือ '+code);
+  }
+}
+
+function goExplore(){
+  window.location.href = 'explore.html';
+}
+</script>
+</body>
+</html>
