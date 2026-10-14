@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>เลือกมังงะ | Manga Studio</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:22px;background:#100d20;color:#fff;font-family:Arial,sans-serif}
+.container{max-width:1000px;margin:auto}
+a{color:#c8a7ff;text-decoration:none}
+header{padding:25px 0}
+h1{font-size:30px;margin:14px 0}
+p{color:#c4bdd7;line-height:1.7}
+.notice{background:#302744;padding:14px;border-radius:12px;line-height:1.7;font-size:14px;color:#e4d9ff}
+.search{width:100%;padding:14px;margin:20px 0;background:#201a35;border:1px solid #594a77;border-radius:10px;color:white;font-size:16px}
+.categories{display:flex;gap:9px;flex-wrap:wrap;margin:15px 0 22px}
+.categories button{background:#302744;color:#e6dcff;border:1px solid #594a77;border-radius:22px;padding:10px 16px;cursor:pointer}
+.categories button.active{background:#9b6cff;color:white}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.card{background:#201a35;border:1px solid #44365f;border-radius:16px;overflow:hidden}
+.cover{height:150px;display:flex;align-items:center;justify-content:center;font-size:58px;background:linear-gradient(135deg,#423064,#1d2948)}
+.content{padding:16px}
+.tag{font-size:12px;color:#d5b8ff}
+h2{font-size:19px;margin:9px 0}
+button.read{width:100%;padding:12px;background:#9b6cff;color:white;border:0;border-radius:10px;font-weight:bold;cursor:pointer;margin-top:10px}
+.small{font-size:13px}
+#empty{display:none;text-align:center;padding:30px;color:#c4bdd7}
+</style>
+</head>
+<body>
+<div class="container">
+<a href="index.html">← กลับหน้าแรก</a>
+
+<header>
+<div>🎴 MANGA STUDIO</div>
+<h1>📚 เลือกมังงะที่อยากอ่าน</h1>
+<p>เลือกเรื่องที่ชอบ แล้วเตรียมเข้าสู่โลกมังงะ</p>
+</header>
+
+<div class="notice">
+หน้านี้เป็นหน้ารวมเรื่องตัวอย่าง ปัจจุบันยังไม่มีเนื้อหามังงะจริงหรือระบบอ่านพร้อมกัน
+เราจะเพิ่มระบบเปิดอ่านแต่ละเรื่องในขั้นต่อไป
+</div>
+
+<input class="search" id="search" placeholder="🔍 ค้นหาชื่อมังงะ..." oninput="render()">
+
+<div class="categories" id="categories">
+<button class="active" data-category="ทั้งหมด" onclick="setCategory('ทั้งหมด',this)">ทั้งหมด</button>
+<button data-category="โรแมนติก" onclick="setCategory('โรแมนติก',this)">💗 โรแมนติก</button>
+<button data-category="แฟนตาซี" onclick="setCategory('แฟนตาซี',this)">✨ แฟนตาซี</button>
+<button data-category="ชีวิตประจำวัน" onclick="setCategory('ชีวิตประจำวัน',this)">🌿 ชีวิตประจำวัน</button>
+<button data-category="ผจญภัย" onclick="setCategory('ผจญภัย',this)">⚔️ ผจญภัย</button>
+</div>
+
+<div class="grid" id="grid"></div>
+<div id="empty">ไม่พบมังงะที่ค้นหา</div>
+
+<p class="small">ในอนาคตจะเพิ่มมังงะของสมาชิก ระบบอัปโหลดภาพ และการกำหนดจำนวนบทบาทตัวละครได้</p>
+</div>
+
+<script>
+const mangaList = [
+  {id:1,title:'ฤดูฝนที่เราได้พบกัน',category:'โรแมนติก',emoji:'🌧️',description:'เรื่องราวการพบกันของคนสองคนในวันฝนตก'},
+  {id:2,title:'คำสัญญาใต้แสงดาว',category:'แฟนตาซี',emoji:'🌌',description:'การเดินทางตามหาคำตอบของคำสัญญาเก่า'},
+  {id:3,title:'วันธรรมดาของเรา',category:'ชีวิตประจำวัน',emoji:'☕',description:'เรื่องเล็ก ๆ ที่ทำให้แต่ละวันมีความหมาย'},
+  {id:4,title:'ผู้พิทักษ์แห่งดินแดนลับ',category:'ผจญภัย',emoji:'🗡️',description:'การผจญภัยของกลุ่มเพื่อนในโลกที่ไม่รู้จัก'}
+];
+
+let selectedCategory = 'ทั้งหมด';
+
+function setCategory(category,button){
+  selectedCategory = category;
+  document.querySelectorAll('.categories button').forEach(b=>b.classList.remove('active'));
+  button.classList.add('active');
+  render();
+}
+
+function render(){
+  const query = document.getElementById('search').value.trim().toLowerCase();
+  const filtered = mangaList.filter(m =>
+    (selectedCategory==='ทั้งหมด'||m.category===selectedCategory) &&
+    m.title.toLowerCase().includes(query)
+  );
+
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  document.getElementById('empty').style.display = filtered.length ? 'none' : 'block';
+
+  filtered.forEach(m=>{
+    const card = document.createElement('article');
+    card.className = 'card';
+
+    const cover = document.createElement('div');
+    cover.className = 'cover';
+    cover.textContent = m.emoji;
+
+    const content = document.createElement('div');
+    content.className = 'content';
+
+    const tag = document.createElement('div');
+    tag.className = 'tag';
+    tag.textContent = m.category;
+
+    const title = document.createElement('h2');
+    title.textContent = m.title;
+
+    const description = document.createElement('p');
+    description.textContent = m.description;
+
+    const button = document.createElement('button');
+    button.className = 'read';
+    button.textContent = 'เลือกเรื่องนี้';
+    button.onclick = ()=>chooseManga(m);
+
+    content.append(tag,title,description,button);
+    card.append(cover,content);
+    grid.appendChild(card);
+  });
+}
+
+function chooseManga(manga){
+  alert('มึงเลือกเรื่อง: '+manga.title+
+    '\\n\\nขั้นต่อไปเราจะสร้างหน้าอ่านมังงะสำหรับเรื่องนี้');
+}
+
+render();
+</script>
+</body>
+</html>
