@@ -152,5 +152,55 @@
   <footer>
     Manga Studio · Your Story, Your World
   </footer>
+  <script type="module">
+  import { createClient } from
+    'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+  const SUPABASE_URL = 'https://uksrlcpcusrqnjunqglc.supabase.co';
+  const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_gpTZTA1PRd6o2mLTS1MgHA_PAgpgtfT';
+
+  const supabase = createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+  );
+
+  const status = document.getElementById('creatorStatus');
+
+  async function checkCreatorPermission() {
+    status.textContent = 'กำลังตรวจสอบบัญชีผู้สร้าง...';
+
+    const { data: { user }, error: authError } =
+      await supabase.auth.getUser();
+
+    if (authError || !user) {
+      status.textContent =
+        'กรุณาเข้าสู่ระบบก่อนตรวจสอบสิทธิ์ผู้สร้าง';
+      return;
+    }
+
+    const { data, error } = await supabase
+      .from('creator_permissions')
+      .select('user_id')
+      .eq('user_id', user.id)
+      .maybeSingle();
+
+    if (error) {
+      status.textContent =
+        'ตรวจสอบสิทธิ์ไม่สำเร็จ กรุณาตรวจสอบการตั้งค่าฐานข้อมูล';
+      console.error(error);
+      return;
+    }
+
+    if (data) {
+      status.textContent =
+        'ยืนยันแล้ว: บัญชีนี้ได้รับสิทธิ์ผู้สร้าง';
+    } else {
+      status.textContent =
+        'บัญชีนี้ยังไม่ได้รับสิทธิ์ผู้สร้าง';
+    }
+  }
+
+  checkCreatorPermission();
+</script>
 </body>
 </html>
