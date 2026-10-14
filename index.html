@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#171321">
+  <title>Manga Studio — Read, Create, Share</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #fff;
+      background: #171321;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 6%;
+      border-bottom: 1px solid #332b46;
+    }
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: 1px;
+    }
+    .logo-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: #8b5cf6;
+      font-size: 25px;
+    }
+    .tagline {
+      color: #c4b5fd;
+      text-align: center;
+      font-size: 14px;
+      margin-top: 7px;
+    }
+    main {
+      width: min(700px, 92%);
+      margin: 48px auto;
+      text-align: center;
+    }
+    .hero-logo {
+      width: 96px;
+      height: 96px;
+      margin: 0 auto 20px;
+      display: grid;
+      place-items: center;
+      border-radius: 28px;
+      background: linear-gradient(135deg, #a78bfa, #6d28d9);
+      font-size: 48px;
+      box-shadow: 0 12px 40px #8b5cf633;
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(30px, 7vw, 46px);
+      letter-spacing: 2px;
+    }
+    .subtitle {
+      color: #bcb5cc;
+      line-height: 1.8;
+      margin: 12px 0 30px;
+    }
+    .menu {
+      display: grid;
+      gap: 14px;
+      text-align: left;
+    }
+    .menu a {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 19px;
+      text-decoration: none;
+      color: #fff;
+      background: #252033;
+      border: 1px solid #3d3353;
+      border-radius: 16px;
+      transition: .2s;
+    }
+    .menu a:hover {
+      background: #322447;
+      border-color: #a78bfa;
+      transform: translateY(-2px);
+    }
+    .menu a.primary {
+      background: #7c3aed;
+      border-color: #8b5cf6;
+    }
+    .menu a.primary:hover { background: #6d28d9; }
+    .menu .emoji { font-size: 29px; }
+    .menu strong { display: block; font-size: 16px; }
+    .menu small {
+      display: block;
+      color: #d0c9df;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+    footer {
+      text-align: center;
+      padding: 24px;
+      color: #81788f;
+      font-size: 12px;
+    }
+    @media (min-width: 600px) {
+      .menu { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">
+      <div class="logo-icon">📖</div>
+      <span>MANGA STUDIO</span>
+    </div>
+    <span aria-label="เมนู">☰</span>
+  </header>
+
+  <main>
+    <div class="hero-logo">漫画</div>
+    <h1>MANGA STUDIO</h1>
+    <div class="tagline">READ · CREATE · VOICE · SHARE</div>
+    <p class="subtitle">
+      อ่านมังงะคนเดียวหรือกับเพื่อน<br>
+      สวมบทบาทให้ตัวละคร และแบ่งปันผลงานของคุณ
+    </p>
+
+    <nav class="menu" aria-label="เมนูหลัก">
+      <a class="primary" href="rooms.html">
+        <span class="emoji">👥</span>
+        <span>
+          <strong>อ่านมังงะกับเพื่อน</strong>
+          <small>สร้างห้องหรือค้นหาห้องด้วยรหัส 6 หลัก</small>
+        </span>
+      </a>
+
+      <a href="match.html">
+        <span class="emoji">🎲</span>
+        <span>
+          <strong>จับคู่เพื่อนออนไลน์</strong>
+          <small>สุ่มหาเพื่อนแล้วเลือกเรื่องอ่านด้วยกัน</small>
+        </span>
+      </a>
+
+      <a href="explore.html">
+        <span class="emoji">📚</span>
+        <span>
+          <strong>อ่านมังงะคนเดียว</strong>
+          <small>สำรวจเรื่องต่าง ๆ แล้วเลือกอ่านได้เลย</small>
+        </span>
+      </a>
+
+      <a href="community.html">
+        <span class="emoji">💬</span>
+        <span>
+          <strong>ชุมชนและผลงาน</strong>
+          <small>โพสต์ภาพ วิดีโอ กดไลก์ และแสดงความคิดเห็น</small>
+        </span>
+      </a>
+    </nav>
+  </main>
+
+  <footer>
+    Manga Studio · Your Story, Your World
+  </footer>
+</body>
+</html>
