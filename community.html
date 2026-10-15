@@ -129,10 +129,9 @@
     <section class="panel">
       <h2>📚 ผลงานจากชุมชน</h2>
 
-      <div class="作品">
-        <p>ยังไม่มีการเชื่อมต่อรายการผลงาน</p>
-        <p>ขั้นตอนต่อไปจะตั้งค่าฐานข้อมูลสำหรับผลงาน</p>
-      </div>
+<div id="communityWorks" class="作品">
+  <p>กำลังโหลดผลงานจากชุมชน...</p>
+</div>
     </section>
 
     <section class="panel">
@@ -192,14 +191,160 @@
     }
 
     if (data) {
-      status.textContent =
-        'ยืนยันแล้ว: บัญชีนี้ได้รับสิทธิ์ผู้สร้าง';
-    } else {
-      status.textContent =
-        'บัญชีนี้ยังไม่ได้รับสิทธิ์ผู้สร้าง';
+  status.textContent =
+    'ยืนยันแล้ว: บัญชีนี้ได้รับสิทธิ์ผู้สร้าง';
+
+  document.getElementById('publishPanel').hidden = false;
+} else {
+  status.textContent =
+    'บัญชีนี้ยังไม่ได้รับสิทธิ์ผู้สร้าง';
+
+  document.getElementById('publishPanel').hidden = true;
+}
+  }
+const publishForm = document.getElementById('publishForm');
+  const publishMessage = document.getElementById('publishMessage');
+
+  publishForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    publishMessage.textContent = 'กำลังเผยแพร่ผลงาน...';
+
+    const { data: { user }, error: authError } =
+      await supabase.auth.getUser();
+
+    if (authError || !user) {
+      publishMessage.textContent =
+        'กรุณาเข้าสู่ระบบใหม่ก่อนเผยแพร่ผลงาน';
+      return;
     }
+
+    const { data: permission, error: permissionError } =
+      await supabase
+        .from('creator_permissions')
+        .select('user_id')
+        .eq('user_id', user.id)
+        .maybeSingle();
+
+    if (permissionError || !permission) {
+      publishMessage.textContent =
+        'บัญชีนี้ไม่มีสิทธิ์เผยแพร่ผลงาน';
+      return;
+    }
+
+    const title =
+      document.getElementById('mangaTitle').value.trim();
+    const coverUrl =
+      document.getElementById('mangaCover').value.trim();
+    const description =
+      document.getElementById('mangaDescription').value.trim();
+    const readUrl =
+      document.getElementById('mangaReadUrl').value.trim();
+
+    if (
+      !title || !coverUrl || !description || !readUrl ||
+      !['https:', 'http:'].includes(new URL(coverUrl).protocol) ||
+      !['https:', 'http:'].includes(new URL(readUrl).protocol)
+    ) {
+      publishMessage.textContent =
+        'กรุณากรอกข้อมูลให้ครบและตรวจสอบลิงก์อีกครั้ง';
+      return;
+    }
+
+    const { error } = await supabase
+      .from('manga_works')
+      .insert({
+        creator_id: user.id,
+        title: title,
+        cover_url: coverUrl,
+        description: description,
+        read_url: readUrl
+      });
+
+    if (error) {
+      console.error(error);
+      publishMessage.textContent =
+        'เผยแพร่ไม่สำเร็จ กรุณาตรวจสอบการตั้งค่าฐานข้อมูล';
+      return;
+    }
+
+    publishMessage.textContent = 'เผยแพร่มังงะสำเร็จแล้ว!';
+    publishForm.reset();
+  });
+  async function loadCommunityWorks() {
+    const container = document.getElementById('communityWorks');
+    container.replaceChildren();
+
+    const { data, error } = await supabase
+      .from('manga_works')
+      .select('id, title, cover_url, description, read_url, created_at')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error(error);
+      container.textContent = 'โหลดผลงานไม่สำเร็จ กรุณาลองใหม่ภายหลัง';
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      container.textContent = 'ยังไม่มีผลงานจากชุมชน';
+      return;
+    }
+
+    data.forEach((work) => {
+      const card = document.createElement('article');
+      card.style.cssText =
+        'text-align:left;padding:16px;margin:12px 0;' +
+        'border:1px solid #514466;border-radius:12px;';
+
+      const title = document.createElement('h3');
+      title.textContent = work.title;
+
+      const description = document.createElement('p');
+      description.textContent = work.description || '';
+
+      card.append(title);
+
+      if (work.cover_url) {
+        try {
+          const coverUrl = new URL(work.cover_url);
+          if (['https:', 'http:'].includes(coverUrl.protocol)) {
+            const image = document.createElement('img');
+            image.src = coverUrl.href;
+            image.alt = 'ปกมังงะ ' + work.title;
+            image.loading = 'lazy';
+            image.style.cssText =
+              'display:block;width:100%;max-width:260px;' +
+              'height:auto;border-radius:10px;margin:12px auto;';
+            card.append(image);
+          }
+        } catch {
+          // Do not render an invalid cover URL.
+        }
+      }
+
+      card.append(description);
+
+      try {
+        const readUrl = new URL(work.read_url);
+        if (['https:', 'http:'].includes(readUrl.protocol)) {
+          const link = document.createElement('a');
+          link.href = readUrl.href;
+          link.textContent = '📖 อ่านมังงะ';
+          link.target = '_blank';
+          link.rel = 'noopener noreferrer';
+          link.style.color = '#c4b5fd';
+          card.append(link);
+        }
+      } catch {
+        // Do not render an invalid reading URL.
+      }
+
+      container.append(card);
+    });
   }
 
+  loadCommunityWorks();
+    
   checkCreatorPermission();
 </script>
 </body>
