@@ -203,6 +203,31 @@ detectSessionInUrl: true
 );
 
   const status = document.getElementById('creatorStatus');
+    async function diagnoseSession() {
+  status.textContent = 'กำลังตรวจสอบเซสชันที่บันทึกไว้...';
+
+  try {
+    const { data, error } = await supabase.auth.getSession();
+
+    if (error) {
+      status.textContent = 'อ่านเซสชันไม่สำเร็จ: ' + error.message;
+      console.error('Session diagnostic:', error);
+      return;
+    }
+
+    if (data.session) {
+      status.textContent =
+        'พบเซสชันในเบราว์เซอร์แล้ว กำลังตรวจสอบบัญชี...';
+    } else {
+      status.textContent =
+        'ไม่พบเซสชันในหน้านี้ กรุณาเข้าสู่ระบบใหม่';
+    }
+  } catch (error) {
+    status.textContent =
+      'ตรวจสอบเซสชันไม่สำเร็จ กรุณาลองใหม่';
+    console.error('Session diagnostic:', error);
+  }
+}
 
   async function checkCreatorPermission() {
     status.textContent = 'กำลังตรวจสอบบัญชีผู้สร้าง...';
@@ -381,7 +406,7 @@ const publishForm = document.getElementById('publishForm');
       container.append(card);
     });
   }
-
+  diagnoseSession();
   loadCommunityWorks();
     
   checkCreatorPermission();
