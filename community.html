@@ -113,7 +113,39 @@
 
     <section class="panel">
       <h2>🎨 พื้นที่ผู้สร้างผลงาน</h2>
+      
+  <div id="publishPanel" hidden>
+    <h3>📝 เผยแพร่มังงะของคุณ</h3>
 
+    <form id="publishForm">
+      <p>
+        <label for="mangaTitle">ชื่อเรื่องมังงะ</label><br>
+        <input id="mangaTitle" type="text" maxlength="150"
+          required placeholder="กรอกชื่อเรื่อง">
+      </p>
+
+      <p>
+        <label for="mangaCover">ลิงก์รูปปก</label><br>
+        <input id="mangaCover" type="url" maxlength="2000"
+          required placeholder="https://example.com/cover.jpg">
+      </p>
+
+      <p>
+        <label for="mangaDescription">คำอธิบายเรื่อง</label><br>
+        <textarea id="mangaDescription" maxlength="3000"
+          required placeholder="แนะนำเรื่องมังงะของคุณ"></textarea>
+      </p>
+
+      <p>
+        <label for="mangaReadUrl">ลิงก์อ่านมังงะ</label><br>
+        <input id="mangaReadUrl" type="url" maxlength="2000"
+          required placeholder="https://example.com/read">
+      </p>
+
+      <button type="submit">เผยแพร่ผลงาน</button>
+      <p id="publishMessage" role="status"></p>
+    </form>
+  </div>
       <div class="notice" id="creatorStatus">
         ระบบกำลังเตรียมเชื่อมต่อการตรวจสอบสิทธิ์ผู้สร้าง
         กรุณารอการตั้งค่าระบบให้เสร็จสมบูรณ์
