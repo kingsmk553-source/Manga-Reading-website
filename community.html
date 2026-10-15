@@ -406,9 +406,13 @@ const publishForm = document.getElementById('publishForm');
       container.append(card);
     });
   }
-  diagnoseSession();
-  loadCommunityWorks();
-  checkCreatorPermission();
+async function initializeCommunity() {
+  await diagnoseSession();
+  await loadCommunityWorks();
+  await checkCreatorPermission();
+}
+
+initializeCommunity();
 </script>
 </body>
 </html>
