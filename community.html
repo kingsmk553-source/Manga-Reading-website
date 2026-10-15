@@ -191,9 +191,16 @@
   const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_gpTZTA1PRd6o2mLTS1MgHA_PAgpgtfT';
 
   const supabase = createClient(
-    SUPABASE_URL,
-    SUPABASE_PUBLISHABLE_KEY
-  );
+SUPABASE_URL,
+SUPABASE_PUBLISHABLE_KEY,
+{
+auth: {
+persistSession: true,
+autoRefreshToken: true,
+detectSessionInUrl: true
+}
+}
+);
 
   const status = document.getElementById('creatorStatus');
 
